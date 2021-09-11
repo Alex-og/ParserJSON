@@ -2,50 +2,31 @@ package app.interpreter;
 
 import app.interpreter.model.*;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.*;
-import java.util.jar.JarOutputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 import static java.lang.String.format;
 import static java.lang.String.valueOf;
 
 public class Context {
-    Stack<Pair<String, String>> stack;
+    /*Stack<Pair<String, String>> stack;
     private String inString;
     private boolean flag;
 
     public Context(String inString) {
         stack = new Stack<>();
         this.inString = inString;
-    }
+    }*/
 
-    public void evaluate() {
+   /* public void evaluate() {
         String str = inString.substring(1, inString.length() - 1).trim();
-        parseString(str);
-    }
+        //parseString(str);
+    }*/
 
-    /*
-    "pageInfo": {
-         "pageName": "abc",
-         "pagePic": "http://example.com/content.jpg"
-    }
-    "posts": [
-         {
-              "post_id": "123456789012_123456789012",
-              "actor_id": "1234567890",
-              "picOfPersonWhoPosted": "http://example.com/photo.jpg",
-              "nameOfPersonWhoPosted": "Jane Doe",
-              "message": "Sounds cool. Can't wait to see it!",
-              "likesCount": "2",
-              "comments": [],
-              "timeOfPost": "1234567890"
-         }
-    ]
-     */
-
-    private boolean isSimple(String s) {
+    /*private boolean isSimple(String s) {
         Pattern p = Pattern.compile("\\{\\[");
         Matcher m = p.matcher(s);
         return m.matches();
@@ -55,12 +36,12 @@ public class Context {
         while (!flag) {
             String left = getLeftSideBeforeColon(str.trim());
             String newString = str.substring(left.length() + 3);
-            String right = getRightSideAfterColon(/*str.substring(left.length() + 3)*/ newString.trim());
+            String right = getRightSideAfterColon(*//*str.substring(left.length() + 3)*//* newString.trim());
             Pair<String, String> pair = new Pair<>(left, right);
             stack.push(pair);
         }
-        /*System.out.println(left);
-        System.out.println(right);*/
+        *//*System.out.println(left);
+        System.out.println(right);*//*
     }
 
     private void parsePair(String st) {
@@ -96,46 +77,70 @@ public class Context {
             parseString(str.trim().substring(1));
         }
         return "";
+    }*/
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    /*
+    "pageInfo": {
+         "pageName": "abc",
+         "pagePic": "http://example.com/content.jpg"
+    }
+    "posts": [
+         {
+              "post_id": "123456789012_123456789012",
+              "actor_id": "1234567890",
+              "picOfPersonWhoPosted": "http://example.com/photo.jpg",
+              "nameOfPersonWhoPosted": "Jane Doe",
+              "message": "Sounds cool. Can't wait to see it!",
+              "likesCount": "2",
+              "comments": [],
+              "timeOfPost": "1234567890"
+         }
+    ]
+     */
+    private String input;
+    List<String> listOfTokens;
+    Map<String, Object> mapAllObjects;
+
+    public Context(String input) {
+        this.input = input;
+        listOfTokens = splitByTokens(input);
+        mapAllObjects = new HashMap<>();
     }
 
-    //////////////////////////////////
+    public String getInput() {
+        return input;
+    }
 
-    private void ddd(String s) {
-        List<String> list = new ArrayList<>();
-        Map<String, Object> map = new HashMap<>();
-        StringTokenizer tokenizer = new StringTokenizer(s, "{[:,]}", true);
-        while (tokenizer.hasMoreElements()) {
-            list.add(tokenizer.nextToken().trim());
+    public Map<String, Object> getMapAllObjects() {
+        return mapAllObjects;
+    }
+
+
+    private void ddd() {
+        //printList(listOfTokens);
+
+        if (isSquareNearestToCenter()) {
+            createListFromJsonArray();
+        } else {
+
         }
-        countTokens(list);
-
-        printList(list);
 
 
-        List<String> listN = createListFromJsonArray(list);
-        String newListName = getNameNewList(list);
-        map.put(newListName, listN);
-
-        for (Map.Entry<String, Object> entry : map.entrySet()) {
+        for (Map.Entry<String, Object> entry : mapAllObjects.entrySet()) {
             System.out.println(entry.getKey() + " -- " + entry.getValue());
         }
 
 
-        //System.out.println(list.get(7));
-        /*byte[] b = list.get(15).getBytes();
+        //System.out.println(listOfTokens.get(7));
+        /*byte[] b = listOfTokens.get(15).getBytes();
         System.out.println(Arrays.toString(b));*/
 
-
-
-        printTokens();
+        //printTokens();
     }
 
-    private String getNameNewList(List<String> list) {
-        String name = list.get(currentBeginTokenIndex - 2);
-        list.remove(currentBeginTokenIndex - 1);
-        list.remove(currentBeginTokenIndex - 2);
-        currentBeginTokenIndex = 0;
-        return name;
+    private boolean isSquareNearestToCenter() {
+        return TokenType.BEGIN_ARRAY.getTokenCount() >= TokenType.BEGIN_OBJECT.getTokenCount();
     }
 
 
@@ -146,50 +151,88 @@ public class Context {
     private int currentBeginTokenIndex;
     private int currentEndTokenIndex;
 
-    private List<String> createListFromJsonArray(List<String> list) {
+    private List<String> createListFromJsonArray() {
         int counter = TokenType.BEGIN_ARRAY.getTokenCount();
         String tknBegin = TokenType.BEGIN_ARRAY.getTokenType();
         String tknEnd = TokenType.END_ARRAY.getTokenType();
-        List<String> newList = null;
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).equals(tknBegin)) {
+        List<String> newList = new ArrayList<>();
+        String newListName = null;
+        for (int i = 0; i < listOfTokens.size(); i++) {
+            if (listOfTokens.get(i).equals(tknBegin)) {
                 counter--;
                 if (counter == 0) {
-                    currentBeginTokenIndex = i;
-                    if (list.get(i + 1).equals(tknEnd)) {
-                        newList = new ArrayList<>();
-                        currentEndTokenIndex = i + 1;
+                    //currentBeginTokenIndex = i;
+                    newListName = listOfTokens.get(i - 2);
+                    if (listOfTokens.get(i + 1).equals(tknEnd)) {
+                        listOfTokens.remove(listOfTokens.get(i));
+                        listOfTokens.remove(listOfTokens.get(i + 1));
+                        TokenType.BEGIN_ARRAY.decreaseTokenCount();
+                        TokenType.END_ARRAY.decreaseTokenCount();
+                        //currentEndTokenIndex = i + 1;
                     } else {
-                        fillList(list, i);
+                        newList = fillList(i);
                     }
                 }
             }
         }
-        removeListItems(list);
+        mapAllObjects.put(newListName, newList);
         return newList;
     }
 
-    private void removeListItems(List<String> list) {
-        Iterator<String> iterator = list.iterator();
-        for (int i = currentBeginTokenIndex; i < currentEndTokenIndex; i++) {
-            while (iterator.hasNext()) {
-                iterator.remove();
-            }
-        }
+    private String getNameNewList() {
+        String name = listOfTokens.get(currentBeginTokenIndex - 2);
+        listOfTokens.remove(currentBeginTokenIndex - 1);
+        listOfTokens.remove(currentBeginTokenIndex - 2);
         currentBeginTokenIndex = 0;
-        currentEndTokenIndex = 0;
+        return name;
     }
 
-    private List<String> fillList(List<String> list, int n) {
+    private void removeListItems(List<Integer> list) {
+        //Iterator<String> iterator = list.iterator();
+        /*while (iterator.hasNext()) {
+                iterator.remove();
+            }*/
+        //currentBeginTokenIndex = 0;
+        //currentEndTokenIndex = 0;
+        for (int x = 0; x < listOfTokens.size(); x++) {
+            for (int i = 0; i < list.size(); i++) {
+                if (x == list.get(i)) {
+                    listOfTokens.remove(list.get(i));
+                }
+            }
+        }
+
+    }
+
+    private List<String> fillList(int n) {
         List<String> lst = new ArrayList<>();
-        for (int i = n; i < list.size(); i++) {
-            if (list.get(i).equals(TokenType.END_ARRAY.getTokenType())) {
-                currentEndTokenIndex = i;
+        List<Integer> forRemove = new ArrayList<>();
+
+        for (int i = n + 1; i < listOfTokens.size(); i++) {
+            if (listOfTokens.get(i).equals(TokenType.END_ARRAY.getTokenType())) {
+                //currentEndTokenIndex = i;
+                listOfTokens.remove(i);
+                TokenType.END_ARRAY.decreaseTokenCount();
                 break;
             }
-            lst.add(list.get(i));
+            lst.add(listOfTokens.get(i));
+            forRemove.add(i);
+            //listOfTokens.remove(i);
         }
+        listOfTokens.remove(n);
+        TokenType.BEGIN_ARRAY.decreaseTokenCount();
+        removeListItems(forRemove);
         return lst;
+    }
+
+    private List<String> splitByTokens(String s) {
+        List<String> list = new ArrayList<>();
+        StringTokenizer tokenizer = new StringTokenizer(s, "{[:,]}", true);
+        while (tokenizer.hasMoreElements()) {
+            list.add(tokenizer.nextToken().trim());
+        }
+        countTokens(list);
+        return list;
     }
 
     private void countTokens(List<String> list) {
@@ -228,7 +271,7 @@ public class Context {
         }*/
 
         Context context = new Context(s);
-        context.ddd(s);
+        context.ddd();
     }
 
     private void printTokens() {
