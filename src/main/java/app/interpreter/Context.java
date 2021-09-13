@@ -106,8 +106,6 @@ public class Context {
             setIndex(getIndex() + 1);
             return checkObject(getIndex(), characters);
         }
-
-        //return null;
     }
 
     private Object createMap(char[] characters) {
