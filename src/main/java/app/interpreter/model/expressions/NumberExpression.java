@@ -1,5 +1,8 @@
-package app.interpreter.model;
+package app.interpreter.model.expressions;
 
+/**
+ * @author Oleksandr Haleta
+ */
 public class NumberExpression implements Expression, INumberExpression {
     private final String string;
 
@@ -11,7 +14,7 @@ public class NumberExpression implements Expression, INumberExpression {
     }
 
     @Override
-    public int interpret() {
+    public int interpret(Expression context) {
         return 0;
     }
 

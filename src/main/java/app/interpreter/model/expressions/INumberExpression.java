@@ -1,7 +1,6 @@
-package app.interpreter.model;
+package app.interpreter.model.expressions;
 
 public interface INumberExpression {
-    int interpret();
 
     int asInt();
 

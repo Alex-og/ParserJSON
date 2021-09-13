@@ -7,12 +7,7 @@ package app.interpreter.model;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Форма объекта JSON
- * Объект представляет собой неупорядоченный набор пар «имя / значение». Объект начинается
- * с "{" (левая скобка) и заканчивается "}" (правая скобка). За каждым «именем» следует «:» (двоеточие);
- * пары «имя / значение» разделяются «,» (запятая).
- */
+
 public class JsonObject {
     private Map<String, Object> map = new HashMap<>();
 
