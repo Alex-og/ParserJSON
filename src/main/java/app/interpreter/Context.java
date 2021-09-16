@@ -24,48 +24,7 @@ public class Context {
 
     public void setIndex(int index) {
         this.index = index;
-    }
-
-    /*
-    For fast test 1:
-    {
-        "posts": [
-        "sdff":[],
-        "post_id": "123456789012_123456789012",
-            "actor_id": "1234567890"
-        ]
-        "person": [
-        "nameOfPersonWhoPosted": "Jane Doe",
-            "message": "Sounds cool. Can't wait to see it!"
-        ]
-    }
-    */
-
-    /*
-    For fast test 2:
-    "pageInfo": {
-         "pageName": "abc",
-         "pagePic": "http://example.com/content.jpg"
-    }
-    "posts": [
-         {
-              "post_id": "123456789012_123456789012",
-              "actor_id": "1234567890",
-              "picOfPersonWhoPosted": "http://example.com/photo.jpg",
-              "nameOfPersonWhoPosted": "Jane Doe",
-              "message": "Sounds cool. Can't wait to see it!",
-              "likesCount": "2",
-              "comments": [],
-              "timeOfPost": "1234567890"
-         }
-    ]
-     */
-
-    //{"posts":["sdff":[],"post_id":"123456789012_123456789012","actor_id":"1234567890"]"person":["nameOfPersonWhoPosted":"JaneDoe","message":"Soundscool.Can'twaittoseeit!"]}
-
-    //{"pageInfo":{"pageName":"abc","pagePic":"http://example.com/content.jpg"}"posts":[{"post_id":"123456789012_123456789012","actor_id":"1234567890",
-    // "picOfPersonWhoPosted":"http://example.com/photo.jpg","nameOfPersonWhoPosted":"JaneDoe","message":"Soundscool.Can'twaittoseeit!","likesCount":"2",
-    // "comments":[],"timeOfPost":"1234567890"}]}
+    }    
 
     public void evaluate() {
         String withoutSpaces = string.replaceAll("\\s", "");
