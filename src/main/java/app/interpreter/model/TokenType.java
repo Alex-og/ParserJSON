@@ -1,4 +1,4 @@
-package app.interpreter.model.expressions;
+package app.interpreter.model;
 
 /**
  * @author Oleksandr Haleta
@@ -11,13 +11,13 @@ public interface TokenType {
     static boolean isBeginObject(char c) {
         return c == '{';
     }
-     static boolean isBoolean(String c) {
-         return c.equalsIgnoreCase("true") || c.equalsIgnoreCase("false");
-     }
+    static boolean isBoolean(String c) {
+        return c.equalsIgnoreCase("true") || c.equalsIgnoreCase("false");
+    }
 
-     static boolean isEndArray(char c) {
-         return c == ']';
-     }
+    static boolean isEndArray(char c) {
+        return c == ']';
+    }
 
     static boolean isEndObject(char c) {
         return c == '}';

@@ -1,13 +1,11 @@
-package app.interpreter;
-
-import app.interpreter.model.expressions.TokenType;
+package app.interpreter.model;
 
 import java.util.*;
 
 /**
  * @author Oleksandr Haleta
  */
-public class Context {
+public class Context implements AbstractContext {
     String string;
     Map<String, Object> map;
     int index;
@@ -18,12 +16,18 @@ public class Context {
         index = 0;
     }
 
+    @Override
     public int getIndex() {
         return index;
     }
 
+    @Override
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    public Map<String, Object> getMap() {
+        return map;
     }
 
     /*
@@ -67,23 +71,23 @@ public class Context {
     // "picOfPersonWhoPosted":"http://example.com/photo.jpg","nameOfPersonWhoPosted":"JaneDoe","message":"Soundscool.Can'twaittoseeit!","likesCount":"2",
     // "comments":[],"timeOfPost":"1234567890"}]}
 
+    @Override
     public void evaluate() {
         String withoutSpaces = string.replaceAll("\\s", "");
         char[] characters = withoutSpaces.toCharArray();
         parse(Arrays.copyOfRange(characters, 1, characters.length - 1));
     }
 
-    private void parse(char[] characters) {
+    public void parse(char[] characters) {
         while (index != characters.length - 1) {
             map.put((String) checkObject(index, characters), checkObject(index, characters));
-            //checkObject(0, characters);
         }
         for (Map.Entry<String, Object> m : map.entrySet()) {
             System.out.println(m.getKey() + "--" + m.getValue());
         }
     }
 
-    private Object checkObject(int index, char[] characters) {
+    public Object checkObject(int index, char[] characters) {
         char token = characters[index];
         if (TokenType.isColon(token)) {
             setIndex(getIndex() + 1);
@@ -108,7 +112,7 @@ public class Context {
         }
     }
 
-    private Object createMap(char[] characters) {
+    public Object createMap(char[] characters) {
         Map<String, Object> map = new HashMap<>();
         setIndex(getIndex() + 1);
         if (TokenType.isEndObject(characters[getIndex()])) {
@@ -128,7 +132,7 @@ public class Context {
         return map;
     }
 
-    private List<Object> createList(char[] characters) {
+    public List<Object> createList(char[] characters) {
         List<Object> list = new ArrayList<>();
         setIndex(getIndex() + 1);
         if (TokenType.isEndArray(characters[getIndex()])) {
@@ -147,7 +151,7 @@ public class Context {
         return list;
     }
 
-    private String createString(int index, char[] chars) {
+    public String createString(int index, char[] chars) {
         StringBuilder builder = new StringBuilder();
         for (int i = index + 1; i < chars.length; i++) {
             if (TokenType.isString(chars[i])) {
@@ -160,7 +164,7 @@ public class Context {
     }
 
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         String s = "{\n" +
                 "   \"pageInfo\": {\n" +
                 "         \"pageName\": \"abc\",\n" +
@@ -192,7 +196,7 @@ public class Context {
                 "]\n" +
                 "    }";
 
-        Context context = new Context(s);
+        AbstractContext context = new Context(s);
         context.evaluate();
     }
 
@@ -200,9 +204,10 @@ public class Context {
         for (int i = 0; i < list.size(); i++) {
             System.out.println("index: " + i + " -- " + list.get(i));
         }
-    }
+    }*/
 }
 
+/*
 class Container {
     String name;
     Object body;
@@ -223,5 +228,6 @@ class Container {
                 '}';
     }
 }
+*/
 
 
