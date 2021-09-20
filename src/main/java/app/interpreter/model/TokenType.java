@@ -1,4 +1,4 @@
-package app.interpreter.model.expressions;
+package app.interpreter.model;
 
 /**
  * @author Oleksandr Haleta

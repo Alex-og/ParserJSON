@@ -1,6 +1,6 @@
 package app.interpreter;
 
-import app.interpreter.model.expressions.TokenType;
+import app.interpreter.model.TokenType;
 
 import java.util.*;
 
